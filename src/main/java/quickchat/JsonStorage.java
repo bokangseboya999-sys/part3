@@ -10,7 +10,11 @@ import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
+/**
+ * Minimal dependency-free JSON reader/writer for stored messages.
+ * (You may swap this for Gson or org.json if your lecturer prefers a library; the
+ * calling code only uses read() and write().)
+ */
 public final class JsonStorage {
 
     private static final Pattern OBJECT = Pattern.compile("\\{([^{}]*)\\}", Pattern.DOTALL);
@@ -35,6 +39,7 @@ public final class JsonStorage {
         Files.write(Paths.get(path), sb.toString().getBytes(StandardCharsets.UTF_8));
     }
 
+    /** Returns an empty list if the file does not exist yet. */
     public static List<Message> read(String path) throws IOException {
         List<Message> result = new ArrayList<>();
         Path p = Paths.get(path);

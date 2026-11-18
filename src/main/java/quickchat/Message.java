@@ -16,6 +16,7 @@ public class Message {
     private static final Pattern CELL_PATTERN = Pattern.compile("^\\+\\d{1,3}\\d{1,10}$");
     private static final Random RANDOM = new Random();
 
+    /** All messages sent while the program is running. */
     private static final List<Message> SENT_LOG = new ArrayList<>();
     private static int totalSent = 0;
 
@@ -27,11 +28,12 @@ public class Message {
     private final String messageHash;
     private String flag = "";
 
+    /** Normal constructor: the message ID is randomly generated. */
     public Message(String sender, String recipient, String text, int messageNumber) {
         this(sender, recipient, text, messageNumber, generateMessageID());
     }
 
-
+    /** Constructor used when the ID is supplied (loading from JSON, and unit-test data). */
     public Message(String sender, String recipient, String text, int messageNumber, String messageID) {
         this.sender = sender;
         this.recipient = recipient;
@@ -43,7 +45,7 @@ public class Message {
 
     // ---------- ID ----------
 
-
+    /** Randomly generated ten-digit number (leading zeros allowed). */
     public static String generateMessageID() {
         StringBuilder sb = new StringBuilder(10);
         for (int i = 0; i < 10; i++) {
@@ -52,7 +54,7 @@ public class Message {
         return sb.toString();
     }
 
-
+    /** The message ID must not be more than ten characters. */
     public boolean checkMessageID() {
         return messageID != null && messageID.length() <= 10;
     }
@@ -86,6 +88,10 @@ public class Message {
 
     // ---------- hash ----------
 
+    /**
+     * First two digits of the ID, a colon, the message number, a colon, then the first and last
+     * words of the message, all in capitals. e.g. 00:0:HITONIGHT
+     */
     public static String createMessageHash(String id, int messageNumber, String text) {
         String prefix = id.length() >= 2 ? id.substring(0, 2) : id;
         String[] words = text.trim().split("\\s+");
@@ -119,7 +125,7 @@ public class Message {
         }
     }
 
-
+    /** Full details in the required order: Message ID, Message Hash, Recipient, Message. */
     public String details() {
         return "Message ID: " + messageID + "\n"
                 + "Message Hash: " + messageHash + "\n"

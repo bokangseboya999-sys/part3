@@ -27,10 +27,14 @@ public class Login {
         this.lastName = lastName;
     }
 
+    // ---------- validation methods ----------
+
+    /** Username must contain an underscore and be no more than five characters long. */
     public boolean checkUserName(String username) {
         return username != null && username.contains("_") && username.length() <= 5;
     }
 
+    /** Password: >= 8 chars, a capital letter, a number and a special character. */
     public boolean checkPasswordComplexity(String password) {
         if (password == null || password.length() < 8) {
             return false;
@@ -48,6 +52,7 @@ public class Login {
         return capital && number && special;
     }
 
+    /** Cell number must contain the international code and be correctly sized. */
     public boolean checkCellPhoneNumber(String cell) {
         return cell != null && CELL_PATTERN.matcher(cell).matches();
     }
@@ -77,6 +82,10 @@ public class Login {
 
     // ---------- registration / login ----------
 
+    /**
+     * Validates the details in order (username, password, cell number). Returns the message for the first
+     * failing check, or a success message after storing the details.
+     */
     public String registerUser(String username, String password, String cell) {
         if (!checkUserName(username)) {
             return usernameMessage(username);
@@ -94,6 +103,7 @@ public class Login {
                 + "Cell number successfully captured.\nUser has been registered successfully.";
     }
 
+    /** True only if the entered details match those stored at registration. */
     public boolean loginUser(String enteredUsername, String enteredPassword) {
         return username != null && password != null
                 && username.equals(enteredUsername) && password.equals(enteredPassword);
